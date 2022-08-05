@@ -101,7 +101,7 @@ void BrainAlive_Synthetic::read_data ()
 {
     
     myfile.open (params.file.c_str());
-    std::string data[50] = {0}; 
+    std::string data[50]; 
     double n_data[15] = {0};
     if (myfile.is_open ())
     {
