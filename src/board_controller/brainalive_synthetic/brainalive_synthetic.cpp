@@ -101,8 +101,8 @@ void BrainAlive_Synthetic::read_data ()
 {
     
     myfile.open (params.file.c_str());
-    std::string data[50]; 
-    double n_data[15];
+    std::string data[50] = {0}; 
+    double n_data[15] = {0};
     if (myfile.is_open ())
     {
         std::getline (myfile, mystring);
@@ -119,14 +119,14 @@ void BrainAlive_Synthetic::read_data ()
                 data[i] = a;
                 i++;
             }
-            for (int j = 4; j < 12; j++)
+            for (int j = 4,k=0; j < 12; j++,k++)
             {
-                n_data[j] = atof (data[j].c_str ());
+                n_data[k] = atof (data[j].c_str ());
                 //std::cout << n_data[j] << " ";
             }
-            n_data[9] = atof (data[13].c_str ());
+            n_data[8] = atof (data[13].c_str ());
             //std::cout << "\n";
-            n_data[10] = get_timestamp ();
+            n_data[9] = get_timestamp ();
             push_package (&n_data[0]); // pipe stream's content to standard output
         }
         myfile.close ();
