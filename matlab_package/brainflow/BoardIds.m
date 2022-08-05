@@ -48,5 +48,6 @@ classdef BoardIds < int32
         MUSE_2016_BOARD (41)
         MUSE_2016_BLED_BOARD (42)
         PIEEG_BOARD (43)
+        BRAINALIVE_SYNTHETIC_BOARD (44)
     end
 end

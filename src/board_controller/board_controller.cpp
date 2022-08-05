@@ -19,6 +19,7 @@
 #include "board_controller.h"
 #include "board_info_getter.h"
 #include "brainalive.h"
+#include "brainalive_synthetic.h"
 #include "brainbit.h"
 #include "brainbit_bled.h"
 #include "brainflow_constants.h"
@@ -240,6 +241,9 @@ int prepare_session (int board_id, const char *json_brainflow_input_params)
             break;
         case BoardIds::PIEEG_BOARD:
             board = std::shared_ptr<Board> (new PiEEG (params));
+            break;
+        case BoardIds::BRAINALIVE_SYNTHETIC_BOARD:
+            board = std::shared_ptr<Board> (new BrainAlive_Synthetic (params));
             break;
         default:
             return (int)BrainFlowExitCodes::UNSUPPORTED_BOARD_ERROR;

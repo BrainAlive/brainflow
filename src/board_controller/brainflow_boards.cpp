@@ -768,6 +768,17 @@ BrainFlowBoards::BrainFlowBoards()
         {"emg_channels", {1, 2, 3, 4, 5, 6, 7, 8}},
         {"ecg_channels", {1, 2, 3, 4, 5, 6, 7, 8}}
     };
+    brainflow_boards_json["boards"]["44"]["default"] =
+    {
+        {"name", "BrainAlive_Synthetic"},
+        {"sampling_rate", 250},
+        {"package_num_channel", 8},
+        {"timestamp_channel", 9},
+        {"marker_channel", 10},
+        {"num_rows", 11},
+        {"eeg_channels", {0, 1, 2, 3, 4, 5, 6, 7}},
+        {"eeg_names", "F7,FT7,T7,CP5,CZ,C6,FC6,F4"},
+    };
 }
 
 BrainFlowBoards boards_struct;
