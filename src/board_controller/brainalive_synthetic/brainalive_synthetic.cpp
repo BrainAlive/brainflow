@@ -4,6 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
+#include <chrono>
+#include <iostream>
+#include<vector>
 #include "custom_cast.h"
 #include "get_dll_dir.h"
 #include "timestamp.h"
@@ -99,35 +103,56 @@ int BrainAlive_Synthetic::config_board (std::string config, std::string &respons
 
 void BrainAlive_Synthetic::read_data ()
 {
-    
+    //std::ofstream myfile_2;
     myfile.open (params.file.c_str());
+    //myfile_2.open ("D:/write_data.txt");
     std::string data[50]; 
-    double n_data[15] = {0};
+    double *n_data = new double[15];
+    uint64_t ms =0;
+   
     if (myfile.is_open ())
     {
         std::getline (myfile, mystring);
         
-        while (!myfile.eof ())
-        {   
-            myfile >> mystring;
-            int i = 0;   
-            std::stringstream string_stream (mystring);
-            while (string_stream.good ()) // loop will continue if string stream is error free
+        while ((!myfile.eof ()) && keep_alive)
+        {
+            if ((std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::system_clock::now ().time_since_epoch ()).count () - ms) >= 4)
             {
-                std::string a;
-                getline (string_stream, a, ','); // calling getline fuction
-                data[i] = a;
-                i++;
+                
+                myfile >> mystring;
+               
+                int i = 0;
+                std::stringstream string_stream (mystring);
+                while (string_stream.good ()) // loop will continue if string stream is error free
+                {
+                    std::string a;
+                    getline (string_stream, a, ','); // calling getline fuction
+                    data[i] = a;
+                    i++;
+                }
+                for (int j = 4, k = 0; j < 12; j++, k++)
+                {
+                    n_data[k] = atof (data[j].c_str ());
+                   /* std::cout << n_data[k] << " ";
+                    myfile_2 << n_data[k] << ",";*/
+                }
+
+                n_data[8] = atof (data[13].c_str ());
+                n_data[9] = get_timestamp ();
+              /*  std::cout << n_data[8] << " ";
+                std::cout << n_data[9] << " ";
+                myfile_2 << n_data[8] << ",";
+                myfile_2 << n_data[9] << ",";
+                myfile_2 << "\n";
+                std::cout << "\n";*/
+                ms = std::chrono::duration_cast<std::chrono::milliseconds> (
+                    std::chrono::system_clock::now ().time_since_epoch ())
+                         .count ();
+                
+                
+                push_package (&n_data[0]); // pipe stream's content to standard output
             }
-            for (int j = 4,k=0; j < 12; j++,k++)
-            {
-                n_data[k] = atof (data[j].c_str ());
-                //std::cout << n_data[j] << " ";
-            }
-            n_data[8] = atof (data[13].c_str ());
-            //std::cout << "\n";
-            n_data[9] = get_timestamp ();
-            push_package (&n_data[0]); // pipe stream's content to standard output
+            
         }
         myfile.close ();
     }
